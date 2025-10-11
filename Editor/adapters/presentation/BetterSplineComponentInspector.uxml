@@ -1,12 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ui="UnityEngine.UIElements"
     xmlns:uie="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd"
+    noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="True"
 >
-    <Style src="project://database/Packages/com.luneisolei.bettersplines/Editor/adapters/presentation/better_spline_component.uss?fileID=7433441132597879392&amp;guid=f60c164959e3580a19d8f1ae58866934&amp;type=3#better_spline_component" />
-	<ui:Label text="Hello World! From UXML" />
-	<ui:Label class="custom-label" text="Hello World! With Style" />
-
+    <uie:ObjectField binding-path="splineContainer" type="UnityEngine.Splines.SplineContainer, Unity.Splines" label="Spline Container" />
 </ui:UXML>
