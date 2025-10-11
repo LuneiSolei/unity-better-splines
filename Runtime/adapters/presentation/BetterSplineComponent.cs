@@ -7,18 +7,17 @@ namespace LuneiSolei.BetterSplines.Adapters
     public class BetterSplineComponent : MonoBehaviour
     {
         [SerializeField]
-        private SplineContainer splineComponent;
-        public SplineContainer SplineComponent
+        private SplineContainer splineContainer;
+        public SplineContainer SplineContainer
         {
-            get => splineComponent;
-            set => splineComponent = value;
+            get => splineContainer;
+            set => splineContainer = value;
         }
     
         private void Reset()
         {
             // Set defaults
-            SplineComponent = GetComponent<SplineContainer>();
-        
+            SplineContainer = GetComponent<SplineContainer>();
         }
     }
 }
