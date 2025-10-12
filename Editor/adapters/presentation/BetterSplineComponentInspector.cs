@@ -2,16 +2,19 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine.UIElements;
 using LuneiSolei.BetterSplines.Adapters;
+using LuneiSolei.BetterSplines.Editor.Adapters.Presenters;
 using LuneiSolei.BetterSplines.Editor.Shared;
 using UnityEditor.UIElements;
-using UnityEngine;
-using UnityEngine.Splines;
 
 namespace LuneiSolei.BetterSplines.Editor.Adapters
 {
     [CustomEditor(typeof(BetterSplineComponent))]
     public class BetterSplineComponentInspector : UnityEditor.Editor
     {
+        private BetterSplineComponent _component;
+        private VisualElement _root;
+        private readonly List<IPresenter> _presenters = new();
+
         private static class FieldNames
         {
             public const string SplineDropdown = "SplineDropdown";
@@ -20,56 +23,50 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
         public override VisualElement CreateInspectorGUI()
         {
             // Create a new VisualElement to be the root of the Inspector UI.
-            VisualElement inspector = new();
+            _root = new VisualElement();
             
             // Load and set up UXML/USS
-            LoadUIAssets(inspector);
+            LoadUIAssets();
             
-            // Set up spline dropdown
-            SetUpSplineDropdown(inspector);
+            // Set up presenters
+            SetUpPresenters();
             
             // Bind the serialized object
-            inspector.Bind(serializedObject);
+            _root.Bind(serializedObject);
             
-            return inspector;
+            return _root;
         }
 
-        private static void LoadUIAssets(VisualElement inspector)
+        private void LoadUIAssets()
         {
             // Load UXML
             VisualTreeAsset uxmlAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(InspectorConfig.InspectorUxml);
             if (uxmlAsset == null) return; // This should never happen!
             VisualElement uxmlContent = uxmlAsset.CloneTree();
-            inspector.Add(uxmlContent);
+            _root.Add(uxmlContent);
             
             // Load USS
             StyleSheet ussAsset = AssetDatabase.LoadAssetAtPath<StyleSheet>(InspectorConfig.InspectorUss);
             if (ussAsset == null) return; // This should never happen either!
-            inspector.styleSheets.Add(ussAsset);
+            _root.styleSheets.Add(ussAsset);
         }
 
-        private void SetUpSplineDropdown(VisualElement inspector)
+        private void SetUpPresenters()
         {
-            BetterSplineComponent component = (BetterSplineComponent)target;
-            DropdownField field = inspector.Q<DropdownField>(FieldNames.SplineDropdown);
-            if (component.SplineContainer == null) return;
+            _component = (BetterSplineComponent)target;
+            DropdownField splineIndexDropdown = _root.Q<DropdownField>(FieldNames.SplineDropdown);
 
-            field.choices = GetSplineList();
-            field.index = component.SplineIndex;
-
-            return;
-
-            List<string> GetSplineList()
+            if (splineIndexDropdown != null)
             {
-                List<string> list = new();
-                for (int i = 0; i < component.SplineContainer.Splines.Count; i++)
-                {
-                    Debug.Log("Adding Spline");
-                    list.Add($"Spline {i}");
-                }
-                
-                return list;
+                IPresenter presenter = new SplineIndexDropdown(splineIndexDropdown, _component);
+                presenter.Initialize();
+                _presenters.Add(presenter);
             }
+        }
+
+        private void OnDestroy()
+        {
+            foreach (IPresenter presenter in _presenters) presenter.Dispose();
         }
     }
 }
