@@ -24,11 +24,7 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
         {
             // Create a new VisualElement to be the root of the Inspector UI.
             _root = new VisualElement();
-            
-            // Load and set up UXML/USS
             LoadUIAssets();
-            
-            // Set up presenters
             SetUpPresenters();
             
             // Bind the serialized object
