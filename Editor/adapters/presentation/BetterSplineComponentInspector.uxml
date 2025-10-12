@@ -5,4 +5,5 @@
     editor-extension-mode="True"
 >
     <uie:ObjectField binding-path="splineContainer" type="UnityEngine.Splines.SplineContainer, Unity.Splines" label="Spline Container" />
+    <ui:DropdownField name="SplineDropdown" label="Spline"/>
 </ui:UXML>
