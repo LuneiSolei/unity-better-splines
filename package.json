@@ -1,0 +1,22 @@
+{
+    "name": "com.luneisolei.bettersplines",
+    "version": "0.0.1",
+    "description": "Use this package to utilize more refined control over Unity's default Splines package.",
+    "displayName": "Better Splines",
+    "unity": "6000.0",
+    "author": {
+      "name": "Lunei Solei",
+      "email": "",
+      "url": "https://luneisolei.com"
+    },
+    "changelogUrl": "",
+    "dependencies": {
+        "com.unity.splines": "2.8.0"
+    },
+    "documentationUrl": "",
+    "hideInEditor": true,
+    "keywords": ["spline", "splines", "betterspline",  "bettersplines", "better spline", "better splines"],
+    "license": "Refer to LICENSE.md file",
+    "licensesUrl": "",
+    "samples": [{}]
+}
