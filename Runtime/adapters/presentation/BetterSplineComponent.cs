@@ -34,7 +34,7 @@ namespace LuneiSolei.BetterSplines.Adapters
         {
             // Set defaults
             SplineContainer = GetComponent<SplineContainer>();
-            SplineIndex = -1;
+            SplineIndex = SplineContainer.Splines.Count > 0 ? 0 : -1;
             DefaultGameObject = null;
         }
     }
