@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -22,12 +21,21 @@ namespace LuneiSolei.BetterSplines.Adapters
             get => splineIndex;
             set => splineIndex = value;
         }
+        
+        [SerializeField]
+        private GameObject defaultGameObject;
+        public GameObject DefaultGameObject
+        {
+            get => defaultGameObject;
+            set => defaultGameObject = value;
+        }
     
         private void Reset()
         {
             // Set defaults
             SplineContainer = GetComponent<SplineContainer>();
             SplineIndex = -1;
+            DefaultGameObject = null;
         }
     }
 }
