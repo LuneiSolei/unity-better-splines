@@ -14,7 +14,9 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
         private BetterSplineComponent _component;
         private VisualElement _root;
         private readonly List<IPresenter> _presenters = new();
-
+        
+        // Constants
+        private const string SplineIndexProperty = "splineIndex";
         private static class FieldNames
         {
             public const string SplineDropdown = "SplineDropdown";
@@ -54,7 +56,8 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
 
             if (splineIndexDropdown != null)
             {
-                IPresenter presenter = new SplineIndexDropdown(splineIndexDropdown, _component);
+                SerializedProperty property = serializedObject.FindProperty(SplineIndexProperty);
+                IPresenter presenter = new SplineIndexDropdown(splineIndexDropdown, _component, property);
                 presenter.Initialize();
                 _presenters.Add(presenter);
             }

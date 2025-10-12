@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using LuneiSolei.BetterSplines.Adapters;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Splines;
 using UnityEngine.UIElements;
@@ -10,11 +11,16 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
     {
         private readonly DropdownField _field;
         private readonly BetterSplineComponent _component;
+        private readonly SerializedProperty _property;
 
-        public SplineIndexDropdown(DropdownField field, BetterSplineComponent component)
+        public SplineIndexDropdown(
+            DropdownField field,
+            BetterSplineComponent component,
+            SerializedProperty property)
         {
             _field = field;
             _component = component;
+            _property = property;
         }
         
         public void Initialize()
@@ -22,27 +28,29 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
             if (_component.SplineContainer == null) return;
             
             RefreshChoices();
+            
+            // Register callbacks
             SplineContainer.SplineAdded += OnSplineCountChanged;
+            _field.RegisterValueChangedCallback(OnValueChanged);
+            Undo.undoRedoPerformed += RefreshChoices;
         }
 
         public void Dispose()
         {
+            // Unregister callbacks
             SplineContainer.SplineAdded -= OnSplineCountChanged;
+            _field.UnregisterValueChangedCallback(OnValueChanged);
+            Undo.undoRedoPerformed -= RefreshChoices;
         }
 
         private void RefreshChoices()
         {
             if (_component.SplineContainer == null) return;
 
-            string currentValue = _field.value;
+            _property.serializedObject.Update();
             _field.choices = GetSplineList();
-            
-            // Restore selection or clamp to valid range
-            int newIndex = _field.choices.IndexOf(currentValue);
-            _field.index = newIndex >= 0 ? newIndex : Mathf.Clamp(
-                _component.SplineIndex,
-                0,
-                _field.choices.Count - 1);
+
+            _field.SetValueWithoutNotify(GetSplineNameAtIndex(_property.intValue));
         }
         
         private List<string> GetSplineList()
@@ -53,9 +61,23 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
             return list;
         }
 
+        private string GetSplineNameAtIndex(int index)
+        {
+            if (index < 0 || index >= _component.SplineContainer.Splines.Count)
+                return _field.choices.Count > 0 ? _field.choices[0] : "";
+
+            return _field.choices[index];
+        }
+
         private void OnSplineCountChanged(SplineContainer container, int index)
         {
             if (container == _component.SplineContainer) RefreshChoices();
+        }
+
+        private void OnValueChanged(ChangeEvent<string> evt)
+        {
+            _property.intValue = _field.choices.IndexOf(evt.newValue);
+            _property.serializedObject.ApplyModifiedProperties();
         }
     }
 }
