@@ -9,6 +9,7 @@ namespace LuneiSolei.BetterSplines.Adapters
     [Serializable]
     public class SplineNode
     {
+        [SerializeField] private string name;
         [SerializeField] private Vector3 worldPosition;
         [SerializeField] private Transform parentTransform;
         [SerializeField] internal GameObject prefab;
@@ -100,6 +101,7 @@ namespace LuneiSolei.BetterSplines.Adapters
                 rotation: Quaternion.identity,
                 parent: parentTransform);
             spawnedInstance.hideFlags = HideFlags.DontSave;
+            spawnedInstance.name = name ?? "";
         }
 
         /// <summary>
@@ -119,6 +121,7 @@ namespace LuneiSolei.BetterSplines.Adapters
             spawnedInstance = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(prefab);
             spawnedInstance.transform.SetPositionAndRotation(worldPosition, Quaternion.identity);
             spawnedInstance.transform.SetParent(parentTransform);
+            spawnedInstance.name = name ?? "";
         }
     }
 }
