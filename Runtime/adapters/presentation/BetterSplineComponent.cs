@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using LuneiSolei.BetterSplines.Shared;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -29,13 +32,22 @@ namespace LuneiSolei.BetterSplines.Adapters
             get => defaultGameObject;
             set => defaultGameObject = value;
         }
-    
+        
         private void Reset()
         {
             // Set defaults
-            SplineContainer = GetComponent<SplineContainer>();
-            SplineIndex = SplineContainer.Splines.Count > 0 ? 0 : -1;
-            DefaultGameObject = null;
+            splineContainer = GetComponent<SplineContainer>();
+            splineIndex = splineContainer.Splines.Count > 0 ? 0 : -1;
+            defaultGameObject = null;
+            defaultNodeSpacing = NodeSpacing.EvenSpacing;
+            
+            // Destroy all relevant spawned objects
+            foreach (SplineNode node in splineNodes)
+            {
+                node.prefab = null;
+                if (node.IsSpawned) node.Despawn();
+            }
+            splineNodes.Clear();
         }
     }
 }
