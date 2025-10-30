@@ -4,6 +4,7 @@ using LuneiSolei.BetterSplines.Shared;
 using UnityEngine;
 using UnityEngine.Splines;
 
+[assembly: InternalsVisibleTo("LuneiSolei.BetterSplines.Editor")]
 namespace LuneiSolei.BetterSplines.Adapters
 {
     [ExecuteAlways, AddComponentMenu("Splines/Better Spline")]
