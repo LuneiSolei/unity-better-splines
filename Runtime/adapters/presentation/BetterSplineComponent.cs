@@ -9,12 +9,27 @@ namespace LuneiSolei.BetterSplines.Adapters
     [ExecuteAlways, AddComponentMenu("Splines/Better Spline")]
     public class BetterSplineComponent : MonoBehaviour
     {
-        [SerializeField]
-        private SplineContainer splineContainer;
-        public SplineContainer SplineContainer
+        // Spline
+        [SerializeField] internal SplineContainer splineContainer;
+        [SerializeField] private int splineIndex;
+        
+        // Defaults
+        [SerializeField] private GameObject defaultGameObject;
+        [SerializeField] private NodeSpacing defaultNodeSpacing = NodeSpacing.EvenSpacing;
+        
+        // Misc.
+        [SerializeField] private List<SplineNode> splineNodes = new();
+
+        private Spline AssignedSpline
         {
-            get => splineContainer;
-            set => splineContainer = value;
+            get
+            {
+                if (splineContainer == null ||
+                    splineIndex < 0 ||
+                    splineIndex >= splineContainer.Splines.Count) return null;
+
+                return splineContainer.Splines[splineIndex];
+            }
         }
         
         [SerializeField]
