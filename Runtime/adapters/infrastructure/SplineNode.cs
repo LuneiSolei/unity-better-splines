@@ -28,32 +28,35 @@ namespace LuneiSolei.BetterSplines.Adapters
         /// <summary>
         /// Executes spawning based on environment (build target).
         /// </summary>
-        internal void Spawn()
+        internal GameObject Spawn()
         {
+            Shared.Logger.Debug(
+                message: "Spawning node",
+                data: new Dictionary<string, object>
+                {
+                    {"prefab", prefab},
+                    {"worldPosition", worldPosition},
+                    {"parentTransform", parentTransform},
+                    {"spawnedInstance", spawnedInstance}
+                });
+            
             // Don't respawn unnecessarily
-            if (IsSpawned) return;
+            if (IsSpawned) return null;
 
             if (prefab == null)
             {
                 Shared.Logger.NodePrefabIsNull(parentTransform.gameObject);
 
-                return;
+                return null;
             }
             
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
                 EditorSpawn();
-            #else
+#else
                 RuntimeSpawn();
-            #endif
-        }
+#endif
 
-        /// <summary>
-        /// Despawns the spline node's game object instance.
-        /// </summary>
-        internal void Despawn()
-        {
-            UnityEngine.Object.Destroy(spawnedInstance);
-            spawnedInstance = null;
+            return spawnedInstance;
         }
 
         /// <summary>
