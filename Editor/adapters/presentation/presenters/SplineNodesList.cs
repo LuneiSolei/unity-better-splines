@@ -9,13 +9,11 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
     public class SplineNodesList : IPresenter
     {
         private readonly ListView _field;
-        private readonly SerializedProperty _property;
         private readonly BetterSplineComponent _component;
 
-        public SplineNodesList(ListView field, SerializedProperty property, BetterSplineComponent component)
+        public SplineNodesList(ListView field, BetterSplineComponent component)
         {
             _field = field;
-            _property = property;
             _component = component;
         }
         
@@ -23,12 +21,14 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
         {
             // Register callbacks
             _field.itemsAdded += OnValueChanged;
+            _field.itemsRemoved += OnValueChanged;
         }
 
         public void Dispose()
         {
             // Unregister callbacks
             _field.itemsAdded -= OnValueChanged;
+            _field.itemsRemoved -= OnValueChanged;
         }
 
         private void OnValueChanged(IEnumerable<int> indices)
