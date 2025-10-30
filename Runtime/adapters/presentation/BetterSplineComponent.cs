@@ -6,7 +6,7 @@ using UnityEngine.Splines;
 
 namespace LuneiSolei.BetterSplines.Adapters
 {
-    [AddComponentMenu("Splines/Better Spline")]
+    [ExecuteAlways, AddComponentMenu("Splines/Better Spline")]
     public class BetterSplineComponent : MonoBehaviour
     {
         [SerializeField]
