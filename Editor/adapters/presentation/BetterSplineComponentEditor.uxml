@@ -15,6 +15,7 @@
                   name="SpacingEnum"
                   binding-path="defaultNodeSpacing"/>
     <ui:ListView name="NodeList"
+                 binding-path="splineNodes"
                  fixed-item-height="50"
                  virtualization-method="DynamicHeight"
                  show-foldout-header="true"

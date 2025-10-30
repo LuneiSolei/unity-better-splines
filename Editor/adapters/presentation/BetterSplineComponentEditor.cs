@@ -72,9 +72,6 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
                 _presenters.Add(presenter);
             }
             
-            ListView nodeListView =  _root.Q<ListView>(FieldNames.NodeList);
-            SerializedProperty splineNodesProperty = serializedObject.FindProperty("splineNodes");
-            nodeListView.BindProperty(splineNodesProperty);
         }
 
         private void OnDestroy()
