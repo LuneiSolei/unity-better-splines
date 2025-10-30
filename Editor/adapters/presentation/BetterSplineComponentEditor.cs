@@ -19,13 +19,11 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
         private static class FieldProperties
         {
             public const string SplineIndex = "splineIndex";
-            public const string DefaultNodeSpacing = "defaultNodeSpacing";
         }
 
         private static class FieldNames
         {
             public const string SplineDropdown = "SplineDropdown";
-            public const string SpacingEnum = "SpacingEnum";
             public const string NodeList = "NodeList";
         }
         
@@ -71,20 +69,15 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
                 presenter.Initialize();
                 _presenters.Add(presenter);
             }
-
-            // // Set up default SpacingEnumDropdown
-            EnumField nodeSpacingEnum = _root.Q<EnumField>(FieldNames.SpacingEnum);
-            if (nodeSpacingEnum != null)
+            
+            // Set up SplineNodesListview
+            ListView nodesList = _root.Q<ListView>(FieldNames.NodeList);
+            if (nodesList != null)
             {
-                SerializedProperty property = serializedObject.FindProperty(FieldProperties.DefaultNodeSpacing);
-                IPresenter presenter = new SpacingEnumDropdown(nodeSpacingEnum, _component, property);
+                IPresenter presenter = new SplineNodesList(nodesList, _component);
                 presenter.Initialize();
                 _presenters.Add(presenter);
             }
-            
-            ListView nodeListView =  _root.Q<ListView>(FieldNames.NodeList);
-            SerializedProperty splineNodesProperty = serializedObject.FindProperty("splineNodes");
-            nodeListView.BindProperty(splineNodesProperty);
         }
 
         private void OnDestroy()

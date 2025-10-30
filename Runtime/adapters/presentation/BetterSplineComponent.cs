@@ -23,6 +23,9 @@ namespace LuneiSolei.BetterSplines.Adapters
         [SerializeField] private List<SplineNode> splineNodes = new();
         [NonSerialized] private readonly HashSet<GameObject> _trackedSpawnedInstances = new();
 
+        /// <summary>
+        /// The spline that the BetterSplineComponent will perform operations on.
+        /// </summary>
         private Spline AssignedSpline
         {
             get
