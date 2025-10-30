@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using LuneiSolei.BetterSplines.Shared;
@@ -20,6 +21,7 @@ namespace LuneiSolei.BetterSplines.Adapters
         
         // Misc.
         [SerializeField] private List<SplineNode> splineNodes = new();
+        [NonSerialized] private readonly HashSet<GameObject> _trackedSpawnedInstances = new();
 
         private Spline AssignedSpline
         {
@@ -36,17 +38,8 @@ namespace LuneiSolei.BetterSplines.Adapters
         /// <summary>
         /// Updates all spline nodes along the assigned spline.
         /// </summary>
-        private void UpdateNodes()
+        internal void UpdateNodes()
         {
-            Shared.Logger.Debug(
-                message: "Updating nodes",
-                data: new Dictionary<string, object>
-                {
-                    {"splineIndex", splineIndex},
-                    {"splineContainer", splineContainer}
-                },
-                context: this);
-            
             // Spawn each node in the spline nodes list
             for (int i = 0; i < splineNodes.Count; i++)
             {
@@ -55,7 +48,9 @@ namespace LuneiSolei.BetterSplines.Adapters
                 float ratio = EvaluateRatio(i);
                 node.ValidateGameObject(defaultGameObject);
                 node.UpdatePosition(AssignedSpline, ratio, splineContainer.transform);
-                node.Spawn();
+                GameObject newInstance = node.Spawn();
+                
+                if (newInstance) _trackedSpawnedInstances.Add(newInstance);
             }
         }
 
@@ -107,14 +102,15 @@ namespace LuneiSolei.BetterSplines.Adapters
             splineIndex = splineContainer.Splines.Count > 0 ? 0 : -1;
             defaultGameObject = null;
             defaultNodeSpacing = NodeSpacing.EvenSpacing;
-            
-            // Destroy all relevant spawned objects
-            foreach (SplineNode node in splineNodes)
+
+            foreach (GameObject instance in _trackedSpawnedInstances)
             {
-                node.prefab = null;
-                if (node.IsSpawned) node.Despawn();
+#if UNITY_EDITOR
+                DestroyImmediate(instance);
+#else
+                Destroy(instance);
+#endif
             }
-            splineNodes.Clear();
         }
     }
 }
