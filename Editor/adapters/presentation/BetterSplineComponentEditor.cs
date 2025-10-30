@@ -71,16 +71,6 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
                 presenter.Initialize();
                 _presenters.Add(presenter);
             }
-
-            // // Set up default SpacingEnumDropdown
-            EnumField nodeSpacingEnum = _root.Q<EnumField>(FieldNames.SpacingEnum);
-            if (nodeSpacingEnum != null)
-            {
-                SerializedProperty property = serializedObject.FindProperty(FieldProperties.DefaultNodeSpacing);
-                IPresenter presenter = new SpacingEnumDropdown(nodeSpacingEnum, _component, property);
-                presenter.Initialize();
-                _presenters.Add(presenter);
-            }
             
             ListView nodeListView =  _root.Q<ListView>(FieldNames.NodeList);
             SerializedProperty splineNodesProperty = serializedObject.FindProperty("splineNodes");
