@@ -1,7 +1,11 @@
 {
     "name": "luneisolei.bettersplines.editor",
     "rootNamespace": "LuneiSolei.BetterSplines.Editor",
-    "references": ["GUID:21d1eb854b91ade49bc69a263d12bee2","GUID:9563883888ea00a32a43fe317611504e"],
+    "references": [
+        "GUID:21d1eb854b91ade49bc69a263d12bee2",
+        "GUID:9563883888ea00a32a43fe317611504e",
+        "GUID:e43142fc3fec6554980dde6126631f1d"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
