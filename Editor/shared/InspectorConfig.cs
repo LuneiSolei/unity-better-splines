@@ -5,7 +5,7 @@ namespace LuneiSolei.BetterSplines.Editor.Shared
         private const string PackageRoot = "Packages/com.luneisolei.bettersplines";
         private const string EditorRoot = PackageRoot + "/Editor";
         private const string InspectorRoot = EditorRoot + "/adapters/presentation";
-        private const string InspectorName = "BetterSplineComponentInspector";
+        private const string InspectorName = "BetterSplineComponentEditor";
         
         public const string InspectorUxml = InspectorRoot + "/" + InspectorName + ".uxml";
         public const string InspectorUss = InspectorRoot + "/" + InspectorName + ".uss";
