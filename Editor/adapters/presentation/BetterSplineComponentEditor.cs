@@ -9,17 +9,24 @@ using UnityEditor.UIElements;
 namespace LuneiSolei.BetterSplines.Editor.Adapters
 {
     [CustomEditor(typeof(BetterSplineComponent))]
-    public class BetterSplineComponentInspector : UnityEditor.Editor
+    public class BetterSplineComponentEditor : UnityEditor.Editor
     {
         private BetterSplineComponent _component;
         private VisualElement _root;
         private readonly List<IPresenter> _presenters = new();
         
         // Constants
-        private const string SplineIndexProperty = "splineIndex";
+        private static class FieldProperties
+        {
+            public const string SplineIndex = "splineIndex";
+            public const string DefaultNodeSpacing = "defaultNodeSpacing";
+        }
+
         private static class FieldNames
         {
             public const string SplineDropdown = "SplineDropdown";
+            public const string SpacingEnum = "SpacingEnum";
+            public const string NodeList = "NodeList";
         }
         
         public override VisualElement CreateInspectorGUI()
@@ -51,16 +58,33 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
 
         private void SetUpPresenters()
         {
+            // Get the target BetterSplineComponent
             _component = (BetterSplineComponent)target;
+            
+            // Set up SplineIndexDropdown
             DropdownField splineIndexDropdown = _root.Q<DropdownField>(FieldNames.SplineDropdown);
 
             if (splineIndexDropdown != null)
             {
-                SerializedProperty property = serializedObject.FindProperty(SplineIndexProperty);
+                SerializedProperty property = serializedObject.FindProperty(FieldProperties.SplineIndex);
                 IPresenter presenter = new SplineIndexDropdown(splineIndexDropdown, _component, property);
                 presenter.Initialize();
                 _presenters.Add(presenter);
             }
+
+            // // Set up default SpacingEnumDropdown
+            EnumField nodeSpacingEnum = _root.Q<EnumField>(FieldNames.SpacingEnum);
+            if (nodeSpacingEnum != null)
+            {
+                SerializedProperty property = serializedObject.FindProperty(FieldProperties.DefaultNodeSpacing);
+                IPresenter presenter = new SpacingEnumDropdown(nodeSpacingEnum, _component, property);
+                presenter.Initialize();
+                _presenters.Add(presenter);
+            }
+            
+            ListView nodeListView =  _root.Q<ListView>(FieldNames.NodeList);
+            SerializedProperty splineNodesProperty = serializedObject.FindProperty("splineNodes");
+            nodeListView.BindProperty(splineNodesProperty);
         }
 
         private void OnDestroy()

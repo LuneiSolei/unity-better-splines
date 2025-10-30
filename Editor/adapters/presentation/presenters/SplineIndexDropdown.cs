@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using LuneiSolei.BetterSplines.Adapters;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.Splines;
 using UnityEngine.UIElements;
 
@@ -10,8 +9,8 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
     public class SplineIndexDropdown : IPresenter
     {
         private readonly DropdownField _field;
-        private readonly BetterSplineComponent _component;
         private readonly SerializedProperty _property;
+        private readonly SplineContainer _splineContainer;
 
         public SplineIndexDropdown(
             DropdownField field,
@@ -19,13 +18,13 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
             SerializedProperty property)
         {
             _field = field;
-            _component = component;
             _property = property;
+            _splineContainer = component.splineContainer;
         }
         
         public void Initialize()
         {
-            if (_component.SplineContainer == null) return;
+            if (_splineContainer == null) return;
             
             RefreshChoices();
             
@@ -45,7 +44,7 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
 
         private void RefreshChoices()
         {
-            if (_component.SplineContainer == null) return;
+            if (_splineContainer == null) return;
 
             _property.serializedObject.Update();
             _field.choices = GetSplineList();
@@ -56,14 +55,14 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
         private List<string> GetSplineList()
         {
             List<string> list = new();
-            for (int i = 0; i < _component.SplineContainer.Splines.Count; i++) list.Add($"Spline {i}");
+            for (int i = 0; i < _splineContainer.Splines.Count; i++) list.Add($"Spline {i}");
             
             return list;
         }
 
         private string GetSplineNameAtIndex(int index)
         {
-            if (index < 0 || index >= _component.SplineContainer.Splines.Count)
+            if (index < 0 || index >= _splineContainer.Splines.Count)
                 return _field.choices.Count > 0 ? _field.choices[0] : "";
 
             return _field.choices[index];
@@ -71,7 +70,7 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
 
         private void OnSplineCountChanged(SplineContainer container, int index)
         {
-            if (container == _component.SplineContainer) RefreshChoices();
+            if (container == _splineContainer) RefreshChoices();
         }
 
         private void OnValueChanged(ChangeEvent<string> evt)

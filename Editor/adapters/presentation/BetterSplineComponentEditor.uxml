@@ -1,0 +1,26 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="True"
+>
+    <uie:ObjectField label="Spline Container"
+                     binding-path="splineContainer"
+                     type="UnityEngine.Splines.SplineContainer, Unity.Splines"/>
+    <ui:DropdownField label="Spline" name="SplineDropdown"/>
+    <uie:ObjectField label="Default Game Object"
+                     binding-path="defaultGameObject"
+                     type="UnityEngine.GameObject, UnityEngine"/>
+    <ui:EnumField label="Default Spacing"
+                  name="SpacingEnum"
+                  binding-path="defaultNodeSpacing"/>
+    <ui:ListView name="NodeList"
+                 fixed-item-height="50"
+                 virtualization-method="DynamicHeight"
+                 show-foldout-header="true"
+                 header-title="Nodes"
+                 reorderable="true"
+                 show-add-remove-footer="true"
+                 show-border="true"
+                 show-alternating-row-backgrounds="ContentOnly"/>
+</ui:UXML>
