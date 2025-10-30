@@ -9,7 +9,7 @@ using UnityEditor.UIElements;
 namespace LuneiSolei.BetterSplines.Editor.Adapters
 {
     [CustomEditor(typeof(BetterSplineComponent))]
-    public class BetterSplineComponentInspector : UnityEditor.Editor
+    public class BetterSplineComponentEditor : UnityEditor.Editor
     {
         private BetterSplineComponent _component;
         private VisualElement _root;
