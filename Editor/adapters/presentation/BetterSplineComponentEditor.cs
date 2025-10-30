@@ -16,10 +16,17 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
         private readonly List<IPresenter> _presenters = new();
         
         // Constants
-        private const string SplineIndexProperty = "splineIndex";
+        private static class FieldProperties
+        {
+            public const string SplineIndex = "splineIndex";
+            public const string DefaultNodeSpacing = "defaultNodeSpacing";
+        }
+
         private static class FieldNames
         {
             public const string SplineDropdown = "SplineDropdown";
+            public const string SpacingEnum = "SpacingEnum";
+            public const string NodeList = "NodeList";
         }
         
         public override VisualElement CreateInspectorGUI()
