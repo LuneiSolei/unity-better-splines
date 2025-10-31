@@ -23,5 +23,6 @@
                  reorderable="true"
                  show-add-remove-footer="true"
                  show-border="true"
-                 show-alternating-row-backgrounds="ContentOnly"/>
+                 show-alternating-row-backgrounds="ContentOnly"
+                 show-bound-collection-size="false"/>
 </ui:UXML>

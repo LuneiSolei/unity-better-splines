@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using LuneiSolei.BetterSplines.Shared;
@@ -21,7 +20,7 @@ namespace LuneiSolei.BetterSplines.Adapters
         
         // Misc.
         [SerializeField] private List<SplineNode> splineNodes = new();
-        [NonSerialized] private readonly HashSet<GameObject> _trackedSpawnedInstances = new();
+        private readonly HashSet<SplineNode> _trackedSplineNodes = new();
 
         /// <summary>
         /// The spline that the BetterSplineComponent will perform operations on.
@@ -37,23 +36,63 @@ namespace LuneiSolei.BetterSplines.Adapters
                 return splineContainer.Splines[splineIndex];
             }
         }
+
+        internal void AddSplineNode()
+        {
+            SplineNode newNode = new();
+            splineNodes.Add(newNode);
+            UpdateNodes();
+        }
+
+        internal SplineNode GetLastNode()
+        {
+            return splineNodes[^1];
+        }
+
+        /// <summary>
+        /// Remove a spline node from the component's list. The associated GameObject, if any, will automatically be
+        /// destroyed.
+        /// </summary>
+        /// <param name="node">The node to destroy.</param>
+        internal void DestroySplineNode(SplineNode node)
+        {
+            DestroySplineNodeInternal(node);
+            _trackedSplineNodes.Remove(node);
+        }
+
+        /// <summary>
+        /// Internal method used for common actions between Reset() and DestroySplineNode().
+        /// </summary>
+        /// <param name="node"></param>
+        private void DestroySplineNodeInternal(SplineNode node)
+        {
+            // Check for desynchronized tracking
+            bool isInList = splineNodes.Contains(node);
+            bool isInHashSet = _trackedSplineNodes.Contains(node);
+            
+            if (!isInList && !isInHashSet) return; // Node is not managed by this component instance
+
+            // Destroy instance
+            node.Destroy();
+            splineNodes.Remove(node);
+        }
         
         /// <summary>
         /// Updates all spline nodes along the assigned spline.
         /// </summary>
         internal void UpdateNodes()
         {
-            // Spawn each node in the spline nodes list
             for (int i = 0; i < splineNodes.Count; i++)
             {
                 // Spawn the spline node
                 SplineNode node = splineNodes[i];
+                node.name = $"Spline Node {i}";
                 float ratio = EvaluateRatio(i);
                 node.ValidateGameObject(defaultGameObject);
                 node.UpdatePosition(AssignedSpline, ratio, splineContainer.transform);
-                GameObject newInstance = node.Spawn();
+                node.Spawn();
                 
-                if (newInstance) _trackedSpawnedInstances.Add(newInstance);
+                _trackedSplineNodes.Add(node);
             }
         }
 
@@ -92,7 +131,7 @@ namespace LuneiSolei.BetterSplines.Adapters
             UpdateNodes();
             Spline.Changed += OnSplineChanged;
         }
-
+        
         private void OnDisable()
         {
             Spline.Changed -= OnSplineChanged;
@@ -106,14 +145,12 @@ namespace LuneiSolei.BetterSplines.Adapters
             defaultGameObject = null;
             defaultNodeSpacing = NodeSpacing.EvenSpacing;
 
-            foreach (GameObject instance in _trackedSpawnedInstances)
+            foreach (SplineNode node in _trackedSplineNodes)
             {
-#if UNITY_EDITOR
-                DestroyImmediate(instance);
-#else
-                Destroy(instance);
-#endif
+                DestroySplineNodeInternal(node);;
             }
+
+            _trackedSplineNodes.Clear();
         }
     }
 }

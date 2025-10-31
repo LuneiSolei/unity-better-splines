@@ -74,7 +74,7 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
             ListView nodesList = _root.Q<ListView>(FieldNames.NodeList);
             if (nodesList != null)
             {
-                IPresenter presenter = new SplineNodesList(nodesList, _component);
+                IPresenter presenter = new SplineNodesListView(nodesList, _component);
                 presenter.Initialize();
                 _presenters.Add(presenter);
             }
