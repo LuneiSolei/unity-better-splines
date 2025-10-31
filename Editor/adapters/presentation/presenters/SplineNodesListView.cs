@@ -1,8 +1,4 @@
-using System.Collections.Generic;
 using LuneiSolei.BetterSplines.Adapters;
-using UnityEditor;
-using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
@@ -20,21 +16,12 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
         
         public void Initialize()
         {
-            // Register callbacks
+            // Override default behaviors
             _field.onAdd = OnAdd;
             _field.onRemove = OnRemove;
         }
 
-        public void Dispose()
-        {
-            // Unregister callbacks
-        }
-
-        private void OnValueChanged(IEnumerable<int> indices)
-        {
-            Debug.Log("OnValueChanged");
-            _component.UpdateNodes();
-        }
+        public void Dispose() { }
 
         private void OnAdd(BaseListView element)
         {
