@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 using LuneiSolei.BetterSplines.Shared;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -37,6 +38,9 @@ namespace LuneiSolei.BetterSplines.Adapters
             }
         }
 
+        /// <summary>
+        /// Add a SplineNode to the component.
+        /// </summary>
         internal void AddSplineNode()
         {
             SplineNode newNode = new();
@@ -44,7 +48,27 @@ namespace LuneiSolei.BetterSplines.Adapters
             UpdateNodes();
         }
 
-        internal SplineNode GetLastNode()
+        /// <summary>
+        /// Get a specified SplineNode by list index.
+        /// </summary>
+        /// <returns>A SplineNode, if found. Otherwise, null.</returns>
+        [CanBeNull]
+        internal SplineNode GetSplineNode(int index)
+        {
+            // Ensure we're within bounds
+            if (splineNodes.Count != 0 && index >= 0 && index < splineNodes.Count) return splineNodes[index];
+            
+            // We're out of bounds. Log Error
+            Shared.Logger.SplineNodeNotFound();
+            
+            return null;
+        }
+
+        /// <summary>
+        /// Retrieve the last SplineNode in the component.
+        /// </summary>
+        /// <returns>The resulting SplineNode.</returns>
+        internal SplineNode GetLastSplineNode()
         {
             return splineNodes[^1];
         }

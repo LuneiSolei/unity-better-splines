@@ -11,7 +11,6 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
     [CustomEditor(typeof(BetterSplineComponent))]
     public class BetterSplineComponentEditor : UnityEditor.Editor
     {
-        private BetterSplineComponent _component;
         private VisualElement _root;
         private readonly List<IPresenter> _presenters = new();
         
@@ -42,22 +41,23 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
 
         private void LoadUIAssets()
         {
-            // Load UXML
-            VisualTreeAsset uxmlAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(InspectorConfig.InspectorUxml);
-            if (uxmlAsset == null) return; // This should never happen!
+            // Load assets
+            VisualTreeAsset uxmlAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(EditorConsts.ComponentEditorUxmlPath);
+            StyleSheet ussAsset = AssetDatabase.LoadAssetAtPath<StyleSheet>(EditorConsts.ComponentEditorUssPath);
+            
+            // Ensure we've loaded our assets correctly
+            if (uxmlAsset == null || ussAsset == null) return;
+            
+            // Add assets to the root
             VisualElement uxmlContent = uxmlAsset.CloneTree();
             _root.Add(uxmlContent);
-            
-            // Load USS
-            StyleSheet ussAsset = AssetDatabase.LoadAssetAtPath<StyleSheet>(InspectorConfig.InspectorUss);
-            if (ussAsset == null) return; // This should never happen either!
             _root.styleSheets.Add(ussAsset);
         }
 
         private void SetUpPresenters()
         {
             // Get the target BetterSplineComponent
-            _component = (BetterSplineComponent)target;
+            BetterSplineComponent component = (BetterSplineComponent)target;
             
             // Set up SplineIndexDropdown
             DropdownField splineIndexDropdown = _root.Q<DropdownField>(FieldNames.SplineDropdown);
@@ -65,7 +65,7 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
             if (splineIndexDropdown != null)
             {
                 SerializedProperty property = serializedObject.FindProperty(FieldProperties.SplineIndex);
-                IPresenter presenter = new SplineIndexDropdown(splineIndexDropdown, _component, property);
+                IPresenter presenter = new SplineIndexDropdown(splineIndexDropdown, component, property);
                 presenter.Initialize();
                 _presenters.Add(presenter);
             }
@@ -74,7 +74,7 @@ namespace LuneiSolei.BetterSplines.Editor.Adapters
             ListView nodesList = _root.Q<ListView>(FieldNames.NodeList);
             if (nodesList != null)
             {
-                IPresenter presenter = new SplineNodesListView(nodesList, _component);
+                IPresenter presenter = new SplineNodesListView(nodesList, component, serializedObject);
                 presenter.Initialize();
                 _presenters.Add(presenter);
             }

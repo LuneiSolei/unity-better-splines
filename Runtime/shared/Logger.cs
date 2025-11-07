@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LuneiSolei.BetterSplines.Adapters;
 
 namespace LuneiSolei.BetterSplines.Shared
 {
@@ -72,6 +73,18 @@ namespace LuneiSolei.BetterSplines.Shared
         internal static void NodePrefabIsNull(UnityEngine.Object context = null)
         {
             Warning(message: "Spline node prefab is null", context: context);
+        }
+
+        internal static void SplineNodeNotFound(UnityEngine.Object context = null)
+        {
+            Error(
+                message: "SplineNode not found",
+                data: new Dictionary<string, object>
+                {
+                    {"expected", typeof(SplineNode)},
+                    {"actual", null}
+                },
+                context: context);
         }
     }
 }

@@ -6,13 +6,13 @@ using UnityEngine.UIElements;
 
 namespace LuneiSolei.BetterSplines.Editor.Adapters.Presenters
 {
-    public class SplineIndexDropdown : IPresenter
+    internal class SplineIndexDropdown : IPresenter
     {
         private readonly DropdownField _field;
         private readonly SerializedProperty _property;
         private readonly SplineContainer _splineContainer;
 
-        public SplineIndexDropdown(
+        internal SplineIndexDropdown(
             DropdownField field,
             BetterSplineComponent component,
             SerializedProperty property)

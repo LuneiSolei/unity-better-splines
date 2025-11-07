@@ -9,12 +9,22 @@ namespace LuneiSolei.BetterSplines.Adapters
     [Serializable]
     public class SplineNode
     {
-        [SerializeField] internal string name;
         [SerializeField] private Vector3 worldPosition;
-        [SerializeField] private Transform parentTransform;
+        [SerializeField, HideInInspector] private Transform parentTransform;
         [SerializeField] internal GameObject prefab;
-        [SerializeField] internal GameObject spawnedInstance;
+        [SerializeField, HideInInspector] internal GameObject spawnedInstance;
         internal bool IsSpawned => spawnedInstance != null;
+        
+        [SerializeField] internal string name;
+        internal string Name
+        {
+            get => name;
+            set
+            {
+                spawnedInstance.name = value;
+                name = value;
+            }
+        }
 
         /// <summary>
         /// Ensures the spline node uses its assigned game object or the default game object as defined by the
@@ -26,6 +36,9 @@ namespace LuneiSolei.BetterSplines.Adapters
             if (prefab == null) prefab = defaultGameObject;
         }
 
+        /// <summary>
+        /// Destroys the spawned instance related to the SplineNode.
+        /// </summary>
         internal void Destroy()
         {
             Shared.Logger.Debug("Destroying Node", new Dictionary<string, object> {{"Node", name}});
